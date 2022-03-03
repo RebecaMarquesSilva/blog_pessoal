@@ -23,26 +23,25 @@ export class EntrarComponent implements OnInit {
   }
 
   entrar() {
-    this.authService.entrar(this.userLogin).subscribe((resp: UserLogin) => {
+    this.authService.entrar(this.userLogin).subscribe({ next: (resp: UserLogin) => {
       this.userLogin = resp
 
       environment.token = this.userLogin.token
       environment.nome = this.userLogin.nome
       environment.foto = this.userLogin.foto
       environment.id = this.userLogin.id
+      environment.tipo = this.userLogin.tipo
 
       console.log(environment)
 
-      // console.log(environment.token)
-      // console.log(environment.nome)
-      // console.log(environment.foto)
-      // console.log(environment.id)
-
       this.router.navigate(["/inicio"])
-    }, erro => {
-      if(erro.status == 500) {
-      alert("Usuário e/ou senha estão incorretos!")
+    },
+    error: erro => {
+
+      if(erro.status == 401) {
+      alert("Usuário e/ou senha estão inválidos!")
       }
-    })
-  }
+    }
+  })
+}
 }
